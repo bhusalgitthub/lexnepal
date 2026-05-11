@@ -4,18 +4,18 @@ export function SiteHeader() {
       <div className="brand-block">
         <span className="brand-mark">Lex Nepal</span>
         <p className="brand-copy">
-          Smart digital law workspace with citation-first retrieval.
+          Exact Nepali legal citations, never paraphrased answers.
         </p>
       </div>
 
-      <div className="header-actions">
+      <nav aria-label="User actions" className="header-actions">
         <button className="ghost-button" type="button">
           Log in
         </button>
         <button className="solid-button" type="button">
           Sign up
         </button>
-      </div>
+      </nav>
     </header>
   )
 }

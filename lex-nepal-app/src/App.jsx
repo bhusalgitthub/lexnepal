@@ -1,23 +1,32 @@
 import { useState } from 'react'
 import './App.css'
 import {
-  citations,
-  focusAreas,
-  productColumns,
-  quickPrompts,
-  sprintMilestones,
-  trustMetrics,
+  databaseFields,
+  initialSession,
+  queryPresets,
+  runMockRetrieval,
 } from './appData'
-import { CitationRail } from './components/CitationRail'
-import { FloatingChatPanel } from './components/FloatingChatPanel'
-import { MainShowcase } from './components/MainShowcase'
+import { QuerySidebar } from './components/QuerySidebar'
+import { RetrievalWorkspace } from './components/RetrievalWorkspace'
 import { SiteHeader } from './components/SiteHeader'
 
 export function App() {
-  const [activeCitationId, setActiveCitationId] = useState(citations[0].id)
+  // Keep the typed query local to the app shell so both panels stay in sync.
+  const [query, setQuery] = useState(initialSession.query)
 
-  const activeCitation =
-    citations.find(({ id }) => id === activeCitationId) ?? citations[0]
+  // The active session mimics the backend payload the UI would receive from FastAPI.
+  const [session, setSession] = useState(initialSession)
+
+  function submitQuery(nextQuery) {
+    const trimmedQuery = nextQuery.trim()
+
+    if (!trimmedQuery) {
+      return
+    }
+
+    setQuery(trimmedQuery)
+    setSession(runMockRetrieval(trimmedQuery))
+  }
 
   return (
     <div className="app-shell">
@@ -26,23 +35,18 @@ export function App() {
 
       <SiteHeader />
 
-      <div className="page-grid">
-        <CitationRail
-          activeCitationId={activeCitationId}
-          citations={citations}
-          onSelectCitation={setActiveCitationId}
-        />
+      <div className="workspace-grid">
+        <RetrievalWorkspace session={session} />
 
-        <MainShowcase
-          activeCitation={activeCitation}
-          focusAreas={focusAreas}
-          productColumns={productColumns}
-          sprintMilestones={sprintMilestones}
-          trustMetrics={trustMetrics}
+        <QuerySidebar
+          databaseFields={databaseFields}
+          onQueryChange={setQuery}
+          onSubmitQuery={submitQuery}
+          query={query}
+          queryPresets={queryPresets}
+          session={session}
         />
       </div>
-
-      <FloatingChatPanel citations={citations} quickPrompts={quickPrompts} />
     </div>
   )
 }

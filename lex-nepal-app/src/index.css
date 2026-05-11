@@ -42,12 +42,15 @@
 }
 
 html {
+  height: 100%;
   scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
+  height: 100%;
   min-width: 320px;
+  overflow: hidden;
 }
 
 body,
@@ -77,7 +80,7 @@ img {
 }
 
 #root {
-  min-height: 100vh;
+  height: 100%;
 }
 
 .sr-only {
