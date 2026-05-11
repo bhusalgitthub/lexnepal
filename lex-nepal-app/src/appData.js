@@ -1,20 +1,20 @@
-// PostgreSQL-aligned field notes used by the right sidebar.
-export const databaseFields = [
-  'article_number',
-  'heading_ne',
-  'body_ne',
-  'status',
-  'version_date',
-  'source_url',
-  'reviewer_name',
-  'ocr_confidence',
-]
-
-// Quick prompts keep the demo easy to test without wiring the real backend yet.
-export const queryPresets = [
-  'Worker fired without notice after five years of service',
-  'Employee asking about leave and absence handling',
-  'How should wage deductions be checked before payment?',
+// Demo question cards for the empty workspace state before the user searches.
+export const demoQuestions = [
+  {
+    id: 'termination',
+    title: 'Worker fired without notice after five years of service',
+    tag: 'Termination',
+  },
+  {
+    id: 'leave',
+    title: 'Employee asking about leave and absence handling',
+    tag: 'Leave',
+  },
+  {
+    id: 'wages',
+    title: 'How should wage deductions be checked before payment?',
+    tag: 'Wages',
+  },
 ]
 
 const retrievalCatalog = {
@@ -22,8 +22,6 @@ const retrievalCatalog = {
     classifier: {
       domain: 'labor',
       confidence: 'high',
-      alternates: ['civil', 'company'],
-      routeReason: 'Termination, notice, and service-length terms map cleanly into labor.',
     },
     results: [
       {
@@ -62,8 +60,6 @@ const retrievalCatalog = {
     classifier: {
       domain: 'labor',
       confidence: 'high',
-      alternates: ['family'],
-      routeReason: 'Leave, absence, and worker welfare language strongly suggests labor leave provisions.',
     },
     results: [
       {
@@ -87,8 +83,6 @@ const retrievalCatalog = {
     classifier: {
       domain: 'labor',
       confidence: 'medium',
-      alternates: ['tax', 'civil'],
-      routeReason: 'Wage and deduction queries can overlap with payroll or tax context, so alternates remain visible.',
     },
     results: [
       {
@@ -131,9 +125,6 @@ function createRefusalSession(query) {
     classifier: {
       domain: 'other',
       confidence: 'low',
-      alternates: ['labor', 'civil'],
-      routeReason:
-        'The current demo corpus does not confidently cover this situation, so the UI should refuse rather than guess.',
     },
     results: [],
   }
@@ -167,4 +158,8 @@ export function runMockRetrieval(query) {
   return createRefusalSession(query)
 }
 
-export const initialSession = runMockRetrieval(queryPresets[0])
+export const initialSession = {
+  query: '',
+  classifier: null,
+  results: [],
+}

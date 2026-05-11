@@ -73,7 +73,7 @@
 
 .solid-button,
 .ghost-button,
-.preset-button {
+.demo-card {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -101,7 +101,7 @@
 
 .solid-button:hover,
 .ghost-button:hover,
-.preset-button:hover {
+.demo-card:hover {
   transform: translateY(-2px);
 }
 
@@ -127,39 +127,12 @@
 /* Main workspace stays fixed-height; only the results list below will scroll. */
 .workspace-panel {
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
   overflow: hidden;
-}
-
-.workspace-intro {
-  padding: 1.6rem 1.7rem 1.2rem;
-  border-bottom: 1px solid var(--line);
-}
-
-.workspace-intro h1,
-.answers-panel h2,
-.sidebar-panel h2,
-.result-card h3,
-.empty-state h3 {
-  margin: 0;
-  color: var(--text);
-}
-
-.workspace-intro h1 {
-  margin-top: 0.45rem;
-  font-family: var(--serif);
-  font-size: clamp(2.8rem, 5.5vw, 4.9rem);
-  line-height: 0.96;
-  letter-spacing: -0.05em;
-  max-width: 12ch;
 }
 
 .eyebrow,
 .result-label,
-.status-pill,
-.info-chip,
-.confidence-badge,
-.field-chip {
+.status-pill {
   display: inline-flex;
   align-items: center;
   width: fit-content;
@@ -174,66 +147,14 @@
   color: var(--accent);
 }
 
-.classifier-strip {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.95rem;
-  margin-top: 1.35rem;
-}
-
-.classifier-primary,
-.sidebar-card,
-.result-card,
-.empty-state {
-  padding: 1rem 1.05rem;
-  border-radius: 22px;
-  border: 1px solid rgba(23, 35, 32, 0.08);
-  background: rgba(255, 255, 255, 0.58);
-}
-
-.classifier-primary strong,
-.route-domain {
-  display: block;
-  margin-top: 0.5rem;
-  font-size: 1.2rem;
-  color: var(--text);
-  text-transform: capitalize;
-}
-
-.classifier-alternates {
-  align-content: start;
-}
-
-.chip-row,
-.field-chip-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-}
-
-.info-chip,
-.confidence-badge,
-.field-chip {
-  padding: 0.42rem 0.72rem;
-  background: rgba(12, 111, 97, 0.1);
-  color: var(--accent);
-}
-
-.workspace-summary,
-.sidebar-section p,
-.answers-panel-header p,
-.result-provenance,
-.empty-state p,
-.result-exact-text {
-  margin: 0.8rem 0 0;
-  color: var(--text-muted);
-}
-
-/* This is the only scroll container on the page for the main reading experience. */
 .answers-panel {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
   min-height: 0;
+}
+
+.answers-panel-full {
+  height: 100%;
 }
 
 .answers-panel-header {
@@ -241,13 +162,20 @@
   align-items: end;
   justify-content: space-between;
   gap: 1rem;
-  padding: 1.2rem 1.7rem 1rem;
+  padding: 1.35rem 1.7rem 1rem;
 }
 
-.answers-panel-header p {
-  max-width: 29rem;
-  margin-top: 0;
-  text-align: right;
+.answers-panel-header-minimal {
+  justify-content: flex-start;
+}
+
+.answers-panel h2,
+.sidebar-panel h2,
+.result-card h3,
+.empty-state h3,
+.demo-card h3 {
+  margin: 0;
+  color: var(--text);
 }
 
 .answers-scroll-region {
@@ -256,9 +184,42 @@
   padding: 0 1.7rem 1.7rem;
 }
 
+.demo-grid,
 .results-stack {
   display: grid;
   gap: 1rem;
+}
+
+.demo-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-content: start;
+}
+
+/* Demo cards give the empty state a clear first action without overcrowding the page. */
+.demo-card {
+  display: grid;
+  justify-items: start;
+  gap: 0.9rem;
+  width: 100%;
+  padding: 1.15rem 1.2rem;
+  text-align: left;
+  border: 1px solid rgba(23, 35, 32, 0.08);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.62);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.demo-card h3 {
+  font-size: 1.15rem;
+  line-height: 1.45;
+}
+
+.result-card,
+.empty-state {
+  padding: 1rem 1.05rem;
+  border-radius: 22px;
+  border: 1px solid rgba(23, 35, 32, 0.08);
+  background: rgba(255, 255, 255, 0.58);
 }
 
 .result-card-top {
@@ -275,7 +236,7 @@
 
 /* The citation block is styled like the primary legal text readers care about. */
 .result-exact-text {
-  margin-top: 1rem;
+  margin: 1rem 0 0;
   padding: 1rem 1.05rem;
   border-left: 4px solid rgba(12, 111, 97, 0.22);
   background: rgba(247, 242, 232, 0.72);
@@ -313,8 +274,10 @@
   color: var(--accent-strong);
 }
 
-.result-provenance {
-  margin-top: 1rem;
+.result-provenance,
+.empty-state p {
+  margin: 1rem 0 0;
+  color: var(--text-muted);
 }
 
 .status-amended {
@@ -340,10 +303,14 @@
 
 .sidebar-panel {
   height: 100%;
-  padding: 1.2rem;
+  padding: 1.4rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+
+.sidebar-panel-minimal {
+  justify-content: flex-start;
 }
 
 .sidebar-section {
@@ -353,18 +320,19 @@
 
 .sidebar-form {
   display: grid;
-  gap: 0.85rem;
+  gap: 1rem;
 }
 
 .sidebar-form textarea {
   width: 100%;
   resize: none;
-  padding: 1rem 1.05rem;
-  border-radius: 22px;
+  padding: 1.1rem 1.1rem;
+  border-radius: 24px;
   border: 1px solid rgba(23, 35, 32, 0.1);
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.78);
   color: var(--text);
   outline: none;
+  line-height: 1.65;
 }
 
 .sidebar-form textarea:focus {
@@ -374,27 +342,6 @@
 
 .sidebar-submit {
   width: 100%;
-}
-
-.preset-grid {
-  display: grid;
-  gap: 0.7rem;
-}
-
-.preset-button {
-  width: 100%;
-  text-align: left;
-  padding: 0.9rem 1rem;
-  border: 1px solid rgba(23, 35, 32, 0.08);
-  background: rgba(255, 255, 255, 0.62);
-  color: var(--text);
-}
-
-.sidebar-metadata-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 0.75rem;
-  align-items: center;
 }
 
 .site-header,
@@ -420,17 +367,8 @@
     grid-template-columns: minmax(0, 1fr) 320px;
   }
 
-  .classifier-strip {
+  .demo-grid {
     grid-template-columns: 1fr;
-  }
-
-  .answers-panel-header {
-    align-items: start;
-    flex-direction: column;
-  }
-
-  .answers-panel-header p {
-    text-align: left;
   }
 }
 
@@ -479,7 +417,6 @@
     gap: 16px;
   }
 
-  .workspace-intro,
   .answers-panel-header,
   .answers-scroll-region,
   .sidebar-panel {

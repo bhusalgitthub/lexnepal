@@ -1,3 +1,16 @@
+function DemoQuestionCard({ question, onSelect }) {
+  return (
+    <button
+      className="demo-card"
+      onClick={() => onSelect(question.title)}
+      type="button"
+    >
+      <span className="result-label">{question.tag}</span>
+      <h3>{question.title}</h3>
+    </button>
+  )
+}
+
 function ResultCard({ result }) {
   // Each card mirrors one verified PostgreSQL row returned by the backend.
   return (
@@ -44,58 +57,40 @@ function ResultCard({ result }) {
   )
 }
 
-export function RetrievalWorkspace({ session }) {
+export function RetrievalWorkspace({
+  demoQuestions,
+  onSelectDemoQuestion,
+  session,
+}) {
+  const hasQuery = session.query.trim().length > 0
   const hasResults = session.results.length > 0
 
   return (
     <main className="workspace-panel">
-      <section className="workspace-intro">
-        <div>
-          <span className="eyebrow">Citation retrieval workspace</span>
-          <h1>Show the statute exactly as stored in the verified corpus.</h1>
-        </div>
-
-        <div className="classifier-strip">
-          <div className="classifier-primary">
-            <span className="result-label">Detected domain</span>
-            <strong>{session.classifier.domain}</strong>
-          </div>
-          <div className="classifier-primary">
-            <span className="result-label">Confidence</span>
-            <strong>{session.classifier.confidence}</strong>
-          </div>
-          <div className="classifier-primary classifier-alternates">
-            <span className="result-label">Alternates</span>
-            <div className="chip-row">
-              {session.classifier.alternates.map((alternate) => (
-                <span className="info-chip" key={alternate}>
-                  {alternate}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <p className="workspace-summary">
-          Query: <strong>{session.query}</strong>
-        </p>
-        <p className="workspace-summary">{session.classifier.routeReason}</p>
-      </section>
-
-      <section className="answers-panel">
-        <div className="answers-panel-header">
+      <section className="answers-panel answers-panel-full">
+        <div className="answers-panel-header answers-panel-header-minimal">
           <div>
-            <span className="eyebrow">Results</span>
-            <h2>Exact citation results</h2>
+            <span className="eyebrow">
+              {hasQuery ? 'Exact citation results' : 'Demo questions'}
+            </span>
+            <h2>
+              {hasQuery ? 'Nepal legal citation results' : 'Try one of these questions'}
+            </h2>
           </div>
-          <p>
-            This is the only scrollable area on the page so lawyers can stay
-            focused on the returned provisions.
-          </p>
         </div>
 
         <div className="answers-scroll-region">
-          {hasResults ? (
+          {!hasQuery ? (
+            <div className="demo-grid">
+              {demoQuestions.map((question) => (
+                <DemoQuestionCard
+                  key={question.id}
+                  onSelect={onSelectDemoQuestion}
+                  question={question}
+                />
+              ))}
+            </div>
+          ) : hasResults ? (
             <div className="results-stack">
               {session.results.map((result) => (
                 <ResultCard key={result.id} result={result} />

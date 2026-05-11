@@ -1,20 +1,15 @@
 import { useState } from 'react'
 import './App.css'
-import {
-  databaseFields,
-  initialSession,
-  queryPresets,
-  runMockRetrieval,
-} from './appData'
+import { demoQuestions, initialSession, runMockRetrieval } from './appData'
 import { QuerySidebar } from './components/QuerySidebar'
 import { RetrievalWorkspace } from './components/RetrievalWorkspace'
 import { SiteHeader } from './components/SiteHeader'
 
 export function App() {
-  // Keep the typed query local to the app shell so both panels stay in sync.
+  // Keep the query text local so the sidebar and results area stay synchronized.
   const [query, setQuery] = useState(initialSession.query)
 
-  // The active session mimics the backend payload the UI would receive from FastAPI.
+  // The session shape mirrors the payload the real backend can return later.
   const [session, setSession] = useState(initialSession)
 
   function submitQuery(nextQuery) {
@@ -36,15 +31,16 @@ export function App() {
       <SiteHeader />
 
       <div className="workspace-grid">
-        <RetrievalWorkspace session={session} />
+        <RetrievalWorkspace
+          demoQuestions={demoQuestions}
+          onSelectDemoQuestion={submitQuery}
+          session={session}
+        />
 
         <QuerySidebar
-          databaseFields={databaseFields}
           onQueryChange={setQuery}
           onSubmitQuery={submitQuery}
           query={query}
-          queryPresets={queryPresets}
-          session={session}
         />
       </div>
     </div>
